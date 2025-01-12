@@ -1,4 +1,4 @@
-# Moderations (Hate-speech-CNERG/dehatebert-mono-english)
+# Moderations (distilbert/distilbert-base-uncased-finetuned-sst-2-english)
 from fastapi import APIRouter
 from pydantic import BaseModel
 import os
@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_TOKEN = os.getenv("HUGGINGFACE_API_KEY")
 
-HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60"
+HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english"
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
 router = APIRouter()
@@ -17,7 +17,7 @@ router = APIRouter()
 class ModerationRequest(BaseModel):
     text: str
 
-@router.post("api/moderations")
+@router.post("/api/moderations")
 async def moderate_text(request: ModerationRequest):
     payload = {"inputs": request.text}
     response = requests.post(HUGGING_FACE_API_URL, headers=headers, json=payload)
